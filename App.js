@@ -1,20 +1,36 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
-import Header from './components/Header';
+import {View, StyleSheet, FlatList, Alert} from 'react-native';
 import {uuid} from 'uuidv4';
+import Header from './components/Header';
 import ListItem from './components/ListItem';
+import AddItem from './components/AddItem';
+
 const App = () => {
   const [items, setItems] = useState([
     {id: uuid(), text: 'Milk'},
     {id: uuid(), text: 'Eggs'},
     {id: uuid(), text: 'Bread'},
     {id: uuid(), text: 'Juice'},
+    {id: uuid(), text: 'Ketchup'},
+    {id: uuid(), text: 'Fruits'},
   ]);
 
   const deleteItem = id => {
     setItems(prevItems => {
       return prevItems.filter(item => item.id !== id);
     });
+  };
+
+  const addItem = text => {
+    if (!text) {
+      Alert.alert('Text invalid!', 'Please enter valid text.', [
+        {text: 'Okay'},
+      ]);
+    } else {
+      setItems(prevItems => {
+        return [{id: uuid(), text}, ...prevItems];
+      });
+    }
   };
 
   return (
@@ -27,6 +43,7 @@ const App = () => {
           <ListItem item={item} deleteItem={deleteItem} />
         )}
       />
+      <AddItem addItem={addItem} />
     </View>
   );
 };
